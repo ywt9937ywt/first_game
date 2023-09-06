@@ -10,7 +10,7 @@ public class Hex_Gen_Setting: ScriptableObject
         Standard,
         Water,
         Cliff,
-        Fog = 1000
+        Edit = 1000
     }
 
     public GameObject Standard;
@@ -22,6 +22,7 @@ public class Hex_Gen_Setting: ScriptableObject
         switch (tileType)
         {
             case TileType.Standard:
+            case TileType.Edit:
                 return Standard;
             case TileType.Water:
                 return Water;

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using UnityEngine.UI;
 
 public struct Face
 {
@@ -17,6 +18,7 @@ public struct Face
     }
 }
 
+[ExecuteInEditMode]
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
 public class Procedural_Hex : MonoBehaviour
@@ -26,15 +28,16 @@ public class Procedural_Hex : MonoBehaviour
     private MeshRenderer m_meshRenderer;
     private List<Face> m_faces;
 
-    public Material material;
+    Material material;
     public Color colorMesh;
-    public float innerSize;
-    public float outerSize;
-    public float height;
-    public bool isFlatTopped;
-    [InspectorButton(nameof(SaveMesh))]
-    public bool buttonField;
-    public string meshName = "standard";
+    float innerSize = 0;
+    float outerSize = 0.5f;
+    float height = 0.1f;
+    bool isFlatTopped;
+    //[InspectorButton(nameof(SaveMesh))]
+    //public bool buttonField;
+
+    //public string meshName = "standard";
 
     private void Awake()
     {
@@ -43,23 +46,30 @@ public class Procedural_Hex : MonoBehaviour
 
         m_mesh = new Mesh();
         m_mesh.name = "Hex";
-
+        material = new Material(Shader.Find("Diffuse"));
         m_meshFilter.mesh = m_mesh;
-        m_meshRenderer.material = material;
+        m_meshRenderer.sharedMaterial = material;
+        //m_meshRenderer.sharedMaterial.color = colorMesh;
+        //DrawMesh();
     }
 
-    private void OnEnable()
+    public Mesh GetMesh()
     {
-        m_meshRenderer.material.color = colorMesh;
+        return m_mesh;
+    }
+
+    public void SetColor(Color c)
+    {
+        material.color = c;
+    }
+    public void setVal(float inSize, float outSize, float h, bool FlatTopped = false)
+    {
+        innerSize = inSize;
+        outerSize = outSize;
+        height = h;
+        isFlatTopped = FlatTopped;
         DrawMesh();
     }
-    /*public void OnValidate()
-    {
-        if (Application.isPlaying)
-        {
-            DrawMesh();
-        }
-    }*/
     public void DrawMesh()
     {
         DrawFaces();

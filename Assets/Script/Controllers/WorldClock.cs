@@ -10,7 +10,7 @@ public class WorldClock : MonoBehaviour
     public static int Minute { get; private set; }
     public static int hour { get; private set; }
 
-    private int segmentPerGameHour = 2;
+    //private int segmentPerGameHour = 2;
     private int currentSegment;
 
     private float RealTimeSecToGameh = 30f;
@@ -43,7 +43,7 @@ public class WorldClock : MonoBehaviour
         if (timer <= 0)
         {
             hour++;
-            OnHourChanged.Invoke();
+            //OnHourChanged.Invoke();
         }
     }
 

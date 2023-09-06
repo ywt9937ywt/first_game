@@ -16,7 +16,6 @@ public class Hex_tile : MonoBehaviour
     public Vector3 center_pos;
     public Hex_Gen_Setting settings;
     public Hex_Gen_Setting.TileType tileType;
-    public Transform parentTrans;
     public Vector2Int recCoordinate;
     public Vector3Int cubeCoordinate;
     public List<Hex_tile> neighbours;
@@ -93,12 +92,12 @@ public class Hex_tile : MonoBehaviour
     public void AddTile()
     {
         tile = GameObject.Instantiate(settings.GetTile(tileType));
-        if(gameObject.GetComponent<MeshCollider>() == null)
+        /*if(gameObject.GetComponent<MeshCollider>() == null)
         {
             MeshCollider collider = gameObject.AddComponent<MeshCollider>();
             collider.sharedMesh = tile.GetComponentInChildren<MeshFilter>().mesh;
-        }
-        tile.transform.parent = parentTrans;
+        }*/
+        tile.transform.parent = this.transform;
     }
 
     private void OnValidate()
