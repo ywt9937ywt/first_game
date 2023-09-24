@@ -14,6 +14,8 @@ public class MapPainter : MonoBehaviour
     public bool isEdit = false;
     public Color targetColor;
 
+    public Estate.Estates estateToGen;
+
     private void OnEnable()
     {
         SceneView.duringSceneGui += OnScene;
@@ -24,25 +26,30 @@ public class MapPainter : MonoBehaviour
         if (Application.isPlaying || !isEdit) return;
 
         Event e = Event.current;
-        if (e.type == EventType.MouseDown && e.button == 2)
+
+        Vector3 mousePos = e.mousePosition;
+        float ppp = EditorGUIUtility.pixelsPerPoint;
+        mousePos.y = scene.camera.pixelHeight - mousePos.y * ppp;
+        mousePos.x *= ppp;
+
+        Ray ray = scene.camera.ScreenPointToRay(mousePos);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit))
         {
-            Debug.Log("Middle Mouse was pressed");
-
-            Vector3 mousePos = e.mousePosition;
-            float ppp = EditorGUIUtility.pixelsPerPoint;
-            mousePos.y = scene.camera.pixelHeight - mousePos.y * ppp;
-            mousePos.x *= ppp;
-
-            Ray ray = scene.camera.ScreenPointToRay(mousePos);
-            RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit))
+            if (e.type == EventType.MouseDown && e.button == 2)
             {
-                Debug.Log(hit.transform.gameObject.name);
                 hit.transform.parent.GetComponent<HexTile>().SetHexBase(targetColor);
             }
-            e.Use();
+            if(e.type == EventType.KeyDown && e.Equals(Event.KeyboardEvent(KeyCode.G.ToString())))
+            {
+                Debug.Log(" gen obj");
+                Vector2Int pos = hit.transform.parent.GetComponent<HexTile>().pos;
+                hit.transform.parent.parent.GetComponent<RawMap>().AddObject(estateToGen, pos);
+            }
+                    
         }
+        //e.Use();
     }
     
     public void SaveMap()
