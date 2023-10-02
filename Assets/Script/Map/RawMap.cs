@@ -69,7 +69,7 @@ public class RawMap : MonoBehaviour
 
     }
 
-    public void AddHex(Vector2Int pos, float innersize, float outersize, float height)
+    public Transform AddHex(Vector2Int pos, float innersize, float outersize, float height)
     {
         Vector3 tile_world_pos = HexGrid.get_world_pos(new Vector3(0.0f, 0.0f, 0.0f), new Vector2(pos.x, pos.y), outerSize);
         HexBase = GameObject.Instantiate(hex, tile_world_pos, Quaternion.identity);
@@ -80,9 +80,10 @@ public class RawMap : MonoBehaviour
 
         TileInfo oneInfo = new TileInfo(0, outerSize, 0.1f, pos);
         myMap.Add(pos, oneInfo);
+        return HexBase.transform;
     }
 
-    public void AddObject(Estate.Estates myestate, Vector2Int pos)
+    public void AddObject(Estate.Estates myestate, GameObject genRoot, Vector2Int pos)
     {
         if (HexBase == null) return;
 
@@ -93,7 +94,7 @@ public class RawMap : MonoBehaviour
             return; 
         }
         Vector3 obj_world_pos = HexGrid.get_world_pos(new Vector3(0.0f, 0.0f, 0.0f), new Vector2(pos.x, pos.y), outerSize);
-        HexBase.GetComponent<HexTile>().AddObj(objToGen, obj_world_pos);
+        genRoot.GetComponent<HexTile>().AddObj(objToGen, obj_world_pos);
         myMap.TryGetValue(pos, out TileInfo atile);
         atile.AddEstate(new EstateInfo(myestate, obj_world_pos));
     }
@@ -125,8 +126,8 @@ public class RawMap : MonoBehaviour
         List<TileInfo> loadMap = SaveHandler.ReadFromJSON<TileInfo>(saveName);
         foreach(TileInfo info in loadMap)
         {
-            AddHex(info.pos, info.thisTile.innerSize, info.thisTile.outerSize, info.thisTile.height);
-            AddObject(info.estateinfo.estateType, info.pos);
+            Transform trans = AddHex(info.pos, info.thisTile.innerSize, info.thisTile.outerSize, info.thisTile.height);
+            AddObject(info.estateinfo.estateType, trans.gameObject, info.pos);
 
         }
     }

@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e650abe1fb20b5148938c3768478b941, type: 3}
   m_Name: Estate
   m_EditorClassIdentifier: 
-  pine: {fileID: 0}
-  church: {fileID: 0}
+  pine: {fileID: 8888555024897677923, guid: 6e64eacbb15fcd44bb8ca7855edbe264, type: 3}
+  church: {fileID: 8888555024897677923, guid: 6e64eacbb15fcd44bb8ca7855edbe264, type: 3}

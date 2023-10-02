@@ -37,7 +37,7 @@ public class HexTile : MonoBehaviour
     {
         if(estateObj != null)
         {
-            Destroy(estateObj);
+            DestroyImmediate(estateObj);
         }
         estateObj = GameObject.Instantiate(objToGen, basePos, Quaternion.identity);
         estateObj.transform.parent = this.transform;

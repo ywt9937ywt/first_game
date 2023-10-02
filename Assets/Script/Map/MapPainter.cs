@@ -43,11 +43,10 @@ public class MapPainter : MonoBehaviour
             }
             if(e.type == EventType.KeyDown && e.Equals(Event.KeyboardEvent(KeyCode.G.ToString())))
             {
-                Debug.Log(" gen obj");
+                Debug.Log("gen obj");
                 Vector2Int pos = hit.transform.parent.GetComponent<HexTile>().pos;
-                hit.transform.parent.parent.GetComponent<RawMap>().AddObject(estateToGen, pos);
-            }
-                    
+                hit.transform.parent.parent.GetComponent<RawMap>().AddObject(estateToGen, hit.transform.parent.gameObject, pos);
+            }    
         }
         //e.Use();
     }
