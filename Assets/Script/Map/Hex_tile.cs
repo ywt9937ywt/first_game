@@ -15,7 +15,7 @@ public class Hex_tile : MonoBehaviour
 
     public Vector3 center_pos;
     public Hex_Gen_Setting settings;
-    public Hex_Gen_Setting.TileType tileType;
+    public TileType tileType;
     public Vector2Int recCoordinate;
     public Vector3Int cubeCoordinate;
     public List<Hex_tile> neighbours;
@@ -81,7 +81,7 @@ public class Hex_tile : MonoBehaviour
 
     public void RollTileType()
     {
-        tileType = (Hex_Gen_Setting.TileType)Random.Range(0, 3);
+        tileType = (TileType)Random.Range(0, 3);
     }
 
     private void OnMouseDown()

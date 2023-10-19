@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEditor;
 using UnityEngine.UIElements;
 
+
+#if UNITY_EDITOR
 //[CustomEditor(typeof(HexTile))]
 [ExecuteInEditMode]
 public class MapPainter : MonoBehaviour
@@ -12,14 +14,25 @@ public class MapPainter : MonoBehaviour
     [InspectorButton(nameof(SaveMap))]
     public bool saveMap;
     public bool isEdit = false;
+    public RemoveType removeType;
+    //[InspectorButton(nameof(Switch2DPanel))]
+    //public bool switch2d = false;
     public Color targetColor;
-
     public Estate.Estates estateToGen;
+    public TileType tileType;
+
+    //public GameObject mapEditor2D;
 
     private void OnEnable()
     {
         SceneView.duringSceneGui += OnScene;
     }
+
+    /*public void Switch2DPanel()
+    {
+        switch2d = !switch2d;
+        mapEditor2D.SetActive(switch2d);
+    }*/
 
     void OnScene(SceneView scene)
     {
@@ -37,18 +50,28 @@ public class MapPainter : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit))
         {
+            HexTile scriptHT = hit.transform.GetComponent<HexTile>();
             if (e.type == EventType.MouseDown && e.button == 2)
             {
-                hit.transform.parent.GetComponent<HexTile>().SetHexBase(targetColor);
+                if (scriptHT != null) hit.transform.GetComponent<HexTile>().InvokeRootAddHex((int)tileType, scriptHT.pos);
             }
             if(e.type == EventType.KeyDown && e.Equals(Event.KeyboardEvent(KeyCode.G.ToString())))
             {
                 Debug.Log("gen obj");
-                Vector2Int pos = hit.transform.parent.GetComponent<HexTile>().pos;
-                hit.transform.parent.parent.GetComponent<RawMap>().AddObject(estateToGen, hit.transform.parent.gameObject, pos);
-            }    
+                //Vector2Int pos = hit.transform.GetComponent<HexTile>().pos;
+                //scriptHT = hit.transform.GetComponent<HexTile>();
+                if (scriptHT != null) scriptHT.InvokeRootAddObj((int)estateToGen, scriptHT.pos);
+            }
+            if(e.type == EventType.KeyDown && e.Equals(Event.KeyboardEvent(KeyCode.Backspace.ToString())))
+            {
+                Vector2Int pos = hit.transform.GetComponent<HexTile>().pos;
+                if(removeType == RemoveType.EstateObj)
+                {
+                    //HexTile scriptHT = hit.transform.GetComponent<HexTile>();
+                    if(scriptHT != null) scriptHT.InvokeRootChangeObj(-1, pos);
+                }
+            }
         }
-        //e.Use();
     }
     
     public void SaveMap()
@@ -57,3 +80,11 @@ public class MapPainter : MonoBehaviour
         PrefabUtility.SaveAsPrefabAsset(GameObject.Find("RawMapRoot"), AssetDatabase.GenerateUniqueAssetPath(pathname));
     }
 }
+
+
+public enum RemoveType
+{
+    HexTile = 0,
+    EstateObj,
+}
+#endif

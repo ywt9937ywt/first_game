@@ -10,9 +10,9 @@ public class TileInfo
     //public Estate.Estates thisEstate;
     public EstateInfo estateinfo;
 
-    public TileInfo(float inSize, float outSize, float h, Vector2Int p)
+    public TileInfo(float inSize, float outSize, float h, Vector2Int p, TileType tt = TileType.Edit)
     {
-        thisTile = new HexInfo(inSize, outSize , h);
+        thisTile = new HexInfo(inSize, outSize , h, tt);
         pos = p;
     }
    
@@ -20,19 +20,41 @@ public class TileInfo
     {
         estateinfo = myEstate;
     }
+
+    public void RemoveEstate()
+    {
+        estateinfo = null;
+    }
+
+    public void SetHexType(TileType tt)
+    {
+        thisTile.SetHexType(tt);
+    }
+
+    public TileType GetHexType()
+    {
+        return thisTile.tiletype;
+    }
 }
 
 [System.Serializable]
 public class HexInfo
+{
+    public float outerSize = 0.5f;
+    public float innerSize = 0;
+    public float height = 0.1f;
+    public TileType tiletype;
+    public HexInfo() { }
+    public HexInfo(float inSize, float outSize, float h, TileType tt = TileType.Edit)
     {
-        public float outerSize = 0.5f;
-        public float innerSize = 0;
-        public float height = 0.1f;
-        public HexInfo() { }
-        public HexInfo(float inSize, float outSize, float h)
-        {
-            innerSize = inSize;
-            outerSize = outSize;
-            height = h;
-        }
+        innerSize = inSize;
+        outerSize = outSize;
+        height = h;
+        tiletype = tt;
     }
+
+    public void SetHexType(TileType tt)
+    {
+        tiletype = tt;
+    }
+}

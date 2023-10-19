@@ -14,7 +14,7 @@ public class HexGrid : MonoBehaviour
     public float height = 1f;
     public bool isFlatTopped;
     public Material material;
-    public Hex_Gen_Setting.TileType aimTileType;
+    public TileType aimTileType;
 
     [InspectorButton(nameof(LayoutGrid))]
     public bool buttonField;
@@ -87,7 +87,7 @@ public class HexGrid : MonoBehaviour
                 tile.transform.parent = this.transform;
                 tile.transform.position = tile_world_pos;
 
-                GameObject myTile = GameObject.Instantiate(settings.GetTile(Hex_Gen_Setting.TileType.Edit));
+                GameObject myTile = GameObject.Instantiate(settings.GetTile(TileType.Edit));
                 myTile.transform.parent = tile.transform;
             }
         }

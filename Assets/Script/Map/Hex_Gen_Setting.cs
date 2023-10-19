@@ -5,24 +5,21 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Assets/Script/Map/Generationsettings")]
 public class Hex_Gen_Setting: ScriptableObject
 {
-    public enum TileType
-    {
-        Standard,
-        Water,
-        Cliff,
-        Edit = 1000
-    }
+    
 
     public GameObject Standard;
     public GameObject Water;
     public GameObject Cliff;
 
+    public GameObject Edit;
+
     public GameObject GetTile(TileType tileType)
     {
         switch (tileType)
         {
-            case TileType.Standard:
             case TileType.Edit:
+                return Edit;
+            case TileType.Standard:
                 return Standard;
             case TileType.Water:
                 return Water;
@@ -32,4 +29,12 @@ public class Hex_Gen_Setting: ScriptableObject
         return null;
     }
 
+}
+public enum TileType
+{
+    Standard,
+    Water,
+    Cliff,
+    Mountain,
+    Edit = 1000
 }

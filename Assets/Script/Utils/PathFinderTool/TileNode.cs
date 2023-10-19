@@ -88,7 +88,7 @@ public class TileNode
         foreach (Hex_tile tile in currentNode.target.neighbours)
         {
             TileNode node = new TileNode(tile, origin, destination, currentNode.GetCost());
-            if (tile.tileType != Hex_Gen_Setting.TileType.Standard)
+            if (tile.tileType != TileType.Standard)
             {
                 node.baseCost = 999999;
             }

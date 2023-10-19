@@ -47,9 +47,10 @@ public class Procedural_Hex : MonoBehaviour
         m_mesh = new Mesh();
         m_mesh.name = "Hex";
         material = new Material(Shader.Find("Diffuse"));
-        m_meshFilter.mesh = m_mesh;
+        m_meshFilter.sharedMesh = m_mesh;
         m_meshRenderer.sharedMaterial = material;
-        //m_meshRenderer.sharedMaterial.color = colorMesh;
+        colorMesh = new Color(0.6f, 0.6f, 0.6f, 0.2f);
+        m_meshRenderer.sharedMaterial.color = colorMesh;
         //DrawMesh();
     }
 

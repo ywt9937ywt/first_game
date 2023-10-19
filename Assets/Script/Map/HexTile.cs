@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using GlobalSetting;
 
+[ExecuteInEditMode]
 public class HexTile : MonoBehaviour
 {
     float outerSize = 0.5f;
@@ -10,17 +12,25 @@ public class HexTile : MonoBehaviour
     public Vector2Int pos;
     GameObject hexBase;
     GameObject estateObj;
-    private void Awake()
-    {
-    }
+    private GameObject mapRoot;
 
-    public void Init(float inSize, float outSize, float h, Vector2Int p, bool FlatTopped = false)
+    public void Init(float inSize, float outSize, float h, Vector2Int p, GameObject root, TileType tt,  bool FlatTopped = false)
     {
         pos = p;
-        AddHexBase();
+        AddHexBase(tt, p);
+        mapRoot = root;
     }
     
-    private void AddHexBase()
+    private void AddHexBase(TileType tt, Vector2Int p)
+    {
+        if(tt == TileType.Edit)
+        {
+            //SetHexBase((int)tt, p);
+            GenDefaultHexBase();
+        }
+    }
+
+    private void GenDefaultHexBase()
     {
         hexBase = new GameObject("Hexagon Base");
         hexBase.transform.parent = this.transform;
@@ -29,23 +39,86 @@ public class HexTile : MonoBehaviour
         Procedural_Hex procedural_Hex =  hexBase.AddComponent<Procedural_Hex>();
         procedural_Hex.setVal(innerSize, outerSize, height);
 
-        MeshCollider meshc =  hexBase.AddComponent<MeshCollider>();
+        MeshCollider meshc =  this.transform.gameObject.AddComponent<MeshCollider>();
         meshc.sharedMesh = procedural_Hex.GetMesh();
     }
 
-    public void AddObj(GameObject objToGen, Vector3 basePos)
+    public void AddObj(int objToGen, Vector2Int basePos)
     {
         if(estateObj != null)
         {
             DestroyImmediate(estateObj);
         }
-        estateObj = GameObject.Instantiate(objToGen, basePos, Quaternion.identity);
+        Vector3 worldpos = HexGrid.get_world_pos(new Vector3(0.0f, 0.0f, 0.0f), new Vector2(pos.x, pos.y), outerSize);
+        GameObject genObj = GlobalScripableObj.Instance.EstateSetting.GetEstate(objToGen);
+        if (genObj == null)
+        {
+            Debug.Log("obj to gen is null");
+            return;
+        }
+        estateObj = GameObject.Instantiate(genObj, worldpos, Quaternion.identity);
         estateObj.transform.parent = this.transform;
+
+        //mapRoot.GetComponent<RawMap>().InvokeAddObj(objToGen, basePos);
     }
 
-    public void SetHexBase(Color c)
+    private void RemoveObj()
     {
-        Procedural_Hex procedural_Hex = hexBase.GetComponent<Procedural_Hex>();
-        procedural_Hex.SetColor(c);
+        DestroyImmediate(estateObj);
+    }
+
+
+    public void SetHexBase(int myHexid, Vector2Int pos)
+    {
+        if (hexBase != null)
+        {
+            DestroyImmediate(hexBase);
+        }
+        Vector3 worldpos = HexGrid.get_world_pos(new Vector3(0.0f, 0.0f, 0.0f), new Vector2(pos.x, pos.y), outerSize);
+        GameObject genHex = GlobalScripableObj.Instance.hexSetting.GetTile((TileType)myHexid);
+        if (genHex == null)
+        {
+            Debug.Log("hex to gen is null");
+            return;
+        }
+        hexBase = GameObject.Instantiate(genHex, worldpos, Quaternion.identity);
+        hexBase.transform.parent = this.transform;
+    }
+
+    public void RemoveHexBase()
+    {
+        DestroyImmediate(hexBase);
+
+    }
+
+    public void InvokeRootAddObj(int myestateid, Vector2Int pos)
+    {
+        RawMap rootRawMap = mapRoot.GetComponent<RawMap>();
+        rootRawMap.InvokeAddObj(myestateid, pos);
+        AddObj(myestateid, pos);
+    }
+
+    public void InvokeRootChangeObj(int myestateid, Vector2Int pos)
+    {
+        RawMap rootRawMap = mapRoot.GetComponent<RawMap>();
+        rootRawMap.InvokeChangeObj(myestateid, pos);
+        if(myestateid == -1)
+        {
+            RemoveObj();
+        }
+    }
+
+    public void InvokeRootAddHex(int myHexid, Vector2Int pos)
+    {
+        RawMap rootRawMap = mapRoot.GetComponent<RawMap>();
+        rootRawMap.InvokeAddHex(myHexid, pos);
+        SetHexBase(myHexid, pos);
+    }
+
+    public void InvokeRootRemoveHex(int myHexid, Vector2Int pos)
+    {
+        RawMap rootRawMap = mapRoot.GetComponent<RawMap>();
+        rootRawMap.InvokeAddHex(myHexid, pos);
+        SetHexBase(myHexid, pos);
     }
 }

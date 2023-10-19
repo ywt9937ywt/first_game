@@ -41,3 +41,4 @@ public class EstateInfo
         position = pos;
     }
 }
+
