@@ -7,9 +7,9 @@ public class Hex_Gen_Setting: ScriptableObject
 {
     
 
-    public GameObject Standard;
+    public GameObject Grass;
     public GameObject Water;
-    public GameObject Cliff;
+    public GameObject Mountain;
 
     public GameObject Edit;
 
@@ -19,12 +19,12 @@ public class Hex_Gen_Setting: ScriptableObject
         {
             case TileType.Edit:
                 return Edit;
-            case TileType.Standard:
-                return Standard;
+            case TileType.Grass:
+                return Grass;
             case TileType.Water:
                 return Water;
-            case TileType.Cliff:
-                return Cliff;
+            case TileType.Mountain:
+                return Mountain;
         }
         return null;
     }
@@ -32,9 +32,8 @@ public class Hex_Gen_Setting: ScriptableObject
 }
 public enum TileType
 {
-    Standard,
+    Grass,
     Water,
-    Cliff,
     Mountain,
     Edit = 1000
 }

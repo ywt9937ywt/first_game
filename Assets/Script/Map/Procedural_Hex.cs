@@ -34,10 +34,6 @@ public class Procedural_Hex : MonoBehaviour
     float outerSize = 0.5f;
     float height = 0.1f;
     bool isFlatTopped;
-    //[InspectorButton(nameof(SaveMesh))]
-    //public bool buttonField;
-
-    //public string meshName = "standard";
 
     private void Awake()
     {
@@ -151,10 +147,4 @@ public class Procedural_Hex : MonoBehaviour
         return new Vector3((size * Mathf.Cos(angle_rad)), height, size * Mathf.Sin(angle_rad));
     }
 
-    public void SaveMesh()
-    {
-        //AssetDatabase.CreateAsset(this.gameObject, "Assets/Models/Prefeb/Hexs/" + meshName + ".asset");
-        //string pathname = "Assets/Models/Prefeb/Hexs/" + meshName + ".prefab";
-        //PrefabUtility.SaveAsPrefabAsset(this.gameObject, AssetDatabase.GenerateUniqueAssetPath(pathname));
-    }
 }

@@ -49,7 +49,7 @@ public class GridContainer //: MonoBehaviour
 
     public bool TryDeleteTile(Vector2Int pos)
     {
-        if(myMap[pos] != null)
+        if(myMap.ContainsKey(pos))
         {
             myMap.Remove(pos);
             return true;
@@ -62,6 +62,16 @@ public class GridContainer //: MonoBehaviour
         if (myMap.ContainsKey(pos))
         {
             myMap[pos].RemoveEstate();
+            return true;
+        }
+        return false;
+    }
+
+    public bool TryChangeObjInfo(Vector2Int pos, int myEstate)
+    {
+        if (myMap.ContainsKey(pos))
+        {
+            myMap[pos].ChangeEstate(myEstate);
             return true;
         }
         return false;
@@ -84,7 +94,6 @@ public class GridContainer //: MonoBehaviour
         {
             saveData.Add(pairs.Value);
         }
-        //Debug.Log(Application.persistentDataPath);
         SaveHandler.SaveToJSON<TileInfo>(saveData, saveName);
     }
 

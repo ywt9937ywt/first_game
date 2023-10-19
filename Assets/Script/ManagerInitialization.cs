@@ -2,18 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[ExecuteInEditMode]
 public class ManagerInitialization : MonoBehaviour
 {
     // Start is called before the first frame update
-    public UIManager uiManager { get; private set; }
+    public GameObject globalDataManger;
+    private GameObject ManagersRoot;
     void Awake()
     {
-        uiManager = new UIManager();
+        ManagersRoot = new GameObject("Managers");
+        //CreateGlobalDataManager();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void CreateGlobalDataManager()
     {
-        
+        GameObject.Instantiate(globalDataManger, ManagersRoot.transform);
     }
+    
 }

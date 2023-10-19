@@ -7,7 +7,6 @@ public class TileInfo
 {
     public Vector2Int pos;
     public HexInfo thisTile;
-    //public Estate.Estates thisEstate;
     public EstateInfo estateinfo;
 
     public TileInfo(float inSize, float outSize, float h, Vector2Int p, TileType tt = TileType.Edit)
@@ -24,6 +23,11 @@ public class TileInfo
     public void RemoveEstate()
     {
         estateinfo = null;
+    }
+
+    public void ChangeEstate(int myEstate)
+    {
+        estateinfo.estateType = (Estate.Estates)myEstate;
     }
 
     public void SetHexType(TileType tt)

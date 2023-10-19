@@ -78,7 +78,7 @@ public class Grid_manager: MonoBehaviour
     public Hex_tile GetValidPos()
     {
         Hex_tile tile = hexTiles[Random.Range(0, hexTiles.Length)];
-        while(tile.tileType != TileType.Standard)
+        while(tile.tileType != TileType.Edit)
         {
             tile = hexTiles[Random.Range(0, hexTiles.Length)];
         }

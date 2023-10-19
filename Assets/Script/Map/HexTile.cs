@@ -23,16 +23,7 @@ public class HexTile : MonoBehaviour
     
     private void AddHexBase(TileType tt, Vector2Int p)
     {
-        /*if(tt == TileType.Edit)
-        {
-            GenDefaultHexBase();
-        }
-        else
-        {
-            SetHexBase((int)tt, p);
-        }*/
-        //SetHexBase((int)tt, p);
-        GenDefaultHexBase();
+        SetHexBase((int)tt, p);
     }
 
     private void GenDefaultHexBase()
@@ -64,7 +55,6 @@ public class HexTile : MonoBehaviour
         estateObj = GameObject.Instantiate(genObj, worldpos, Quaternion.identity);
         estateObj.transform.parent = this.transform;
 
-        //mapRoot.GetComponent<RawMap>().InvokeAddObj(objToGen, basePos);
     }
 
     private void RemoveObj()
@@ -99,19 +89,7 @@ public class HexTile : MonoBehaviour
 
     }
 
-    public void InvokeRootAddObj(int myestateid, Vector2Int pos)
-    {
-        if(hexBase == null)
-        {
-            Debug.Log("Please add base first");
-            return;
-        }
-        RawMap rootRawMap = mapRoot.GetComponent<RawMap>();
-        rootRawMap.InvokeAddObj(myestateid, pos);
-        AddObj(myestateid, pos);
-    }
-
-    public void InvokeRootChangeObj(int myestateid, Vector2Int pos)
+    public void InvokeRootChangeObj(int myestateid)
     {
         if (hexBase == null)
         {
@@ -124,21 +102,16 @@ public class HexTile : MonoBehaviour
         {
             RemoveObj();
         }
+        else
+        {
+            AddObj(myestateid, pos);
+        }
     }
 
-    public void InvokeRootAddHex(int myHexid, Vector2Int pos)
+    public void InvokeRootChangeHex(int myHexid)
     {
         RawMap rootRawMap = mapRoot.GetComponent<RawMap>();
-        rootRawMap.InvokeAddHex(myHexid, pos);
-        //SetHexBase(myHexid, pos);
-        if (hexBase != null) hexBase.GetComponent<MeshRenderer>().sharedMaterial.color = new Color(1.0f, 0.0f, 0.0f);
-    }
-
-    public void InvokeRootRemoveHex(int myHexid, Vector2Int pos)
-    {
-        RawMap rootRawMap = mapRoot.GetComponent<RawMap>();
-        rootRawMap.InvokeAddHex(myHexid, pos);
-        //SetHexBase(myHexid, pos);
-        if (hexBase != null) hexBase.GetComponent<MeshRenderer>().sharedMaterial.color = new Color(0.6f, 0.6f, 0.6f, 0.2f);
+        rootRawMap.InvokeChangeHex(myHexid, pos);
+        SetHexBase(myHexid, pos);
     }
 }

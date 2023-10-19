@@ -14,8 +14,6 @@ public class RawMap : MonoBehaviour
     [Header("MapDetail")]
     [InspectorButton(nameof(MapEditGrid))]
     public bool editButton;
-    public Hex_Gen_Setting settings;
-    public string saveName;
     [InspectorButton(nameof(OnSave))]
     public bool saveButton;
     [InspectorButton(nameof(OnLoad))]
@@ -25,17 +23,14 @@ public class RawMap : MonoBehaviour
     [InspectorButton(nameof(Awake))]
     public bool awakeButton;
 
+    public string saveName;
     [ReadOnly] public Vector2Int currentPos;
     private GameObject rawMapRoot;
-    //Dictionary<Vector2Int, TileInfo> myMap = new Dictionary<Vector2Int, TileInfo>();
-    //GridContainer myGridContainer = new GridContainer();
     private GameObject HexBase;
     private GridContainer gridContainer = new GridContainer();
     private bool realTile = false;
 
-    public UnityEventWithArgIV2I OnObjAdd = new UnityEventWithArgIV2I();
     public UnityEventWithArgIV2I OnObjChange = new UnityEventWithArgIV2I();
-    public UnityEventWithArgIV2I OnHexAdd = new UnityEventWithArgIV2I();
     public UnityEventWithArgIV2I OnHexChange = new UnityEventWithArgIV2I();
 
     public void Awake()
@@ -44,10 +39,8 @@ public class RawMap : MonoBehaviour
         {
             rawMapRoot = new GameObject("RawMapRoot");
         }
-        OnObjAdd.AddListener(AddObjectInfo);
         OnObjChange.AddListener(ChangeObjInfo);
-        OnHexAdd.AddListener(AddHexInfo);
-        OnHexAdd.AddListener(ChangeHexInfo);
+        OnHexChange.AddListener(ChangeHexInfo);
     }
     public void ClearMap()
     {
@@ -68,13 +61,11 @@ public class RawMap : MonoBehaviour
         {
             DestroyImmediate(child, true);
         }
-        //GridContainer.GCinstance.Clear();
         gridContainer.Clear();
     }
     public void MapEditGrid()
     {
         ClearMap();
-        //GameObject xTile = GameObject.Instantiate(settings.GetTile(Hex_Gen_Setting.TileType.Edit));
         for (int y = 0; y < GridSize.y; y++)
         {
             for (int x = 0; x < GridSize.x; x++)
@@ -83,7 +74,6 @@ public class RawMap : MonoBehaviour
                 AddHexInfo((int)TileType.Edit, new Vector2Int(x, y));
             }
         }
-        //Debug.Log("1.  " + gridContainer.TileCount());
     }
 
     public Transform AddHex(Vector2Int pos, float innersize, float outersize, float height, TileType tt)
@@ -95,9 +85,6 @@ public class RawMap : MonoBehaviour
         HexTile hextileScript = HexBase.GetComponent<HexTile>();
         hextileScript.Init(innersize, outerSize, height, pos, rawMapRoot, tt);
 
-        //TileInfo oneInfo = new TileInfo(0, outerSize, 0.1f, pos);
-        //GridContainer.GCinstance.Add(pos, oneInfo);
-        //if(updateInfo) gridContainer.Add(pos, oneInfo);
         return HexBase.transform;
     }
 
@@ -112,28 +99,9 @@ public class RawMap : MonoBehaviour
         gridContainer.EditTile(myHexid, pos);
     }
 
-    private void AddObjectInfo(int myestate, Vector2Int pos)
-    {
-        //if (HexBase == null) return;
-        
-        Vector3 obj_world_pos = HexGrid.get_world_pos(new Vector3(0.0f, 0.0f, 0.0f), new Vector2(pos.x, pos.y), outerSize);
-        gridContainer.TryEditTile(pos, out TileInfo atile);
-        if(atile != null ) atile.AddEstate(new EstateInfo((Estate.Estates)myestate, obj_world_pos));
-        //Debug.Log("2.  " + gridContainer.TileCount());
-    }
-
-    private void RemoveObjectInfo(int myestate, Vector2Int pos)
-    {
-        gridContainer.TryDeleteObjInfo(pos);
-    }
-
     private void ChangeObjInfo(int myestate, Vector2Int pos)
     {
-        if(myestate == -1)
-        {
-            RemoveObjectInfo(myestate, pos);
-        }
-        //Debug.Log("3.  " + gridContainer.TileCount());
+        gridContainer.TryChangeObjInfo(pos, myestate);
     }
 
     private void AddObject(int myestate, Vector2Int pos)
@@ -143,22 +111,10 @@ public class RawMap : MonoBehaviour
         HexBase.GetComponent<HexTile>().AddObj(myestate, pos);
     }
 
-    public void InvokeAddObj(int myestate, Vector2Int pos)
-    {
-        currentPos = pos;
-        OnObjAdd?.Invoke(myestate, pos);
-    }
-
     public void InvokeChangeObj(int myestate, Vector2Int pos)
     {
         currentPos = pos;
         OnObjChange?.Invoke(myestate, pos);
-    }
-
-    public void InvokeAddHex(int myestate, Vector2Int pos)
-    {
-        currentPos = pos;
-        OnHexAdd?.Invoke(myestate, pos);
     }
 
     public void InvokeChangeHex(int myestate, Vector2Int pos)
@@ -169,8 +125,6 @@ public class RawMap : MonoBehaviour
 
     public void OnSave()
     {
-        //Debug.Log("4.  " + gridContainer.TileCount());
-        //GridContainer.GCinstance.Save(name);
         gridContainer.Save(saveName);
     }
 
@@ -178,12 +132,10 @@ public class RawMap : MonoBehaviour
     {
         ClearMap();
 
-        //List<TileInfo> loadMap = GridContainer.GCinstance.Load(saveName);
         List<TileInfo> loadMap = gridContainer.Load(saveName);
         foreach (TileInfo info in loadMap)
         {
             Transform trans = AddHex(info.pos, info.thisTile.innerSize, info.thisTile.outerSize, info.thisTile.height, info.GetHexType());
-            //AddObjectInfo((int)info.estateinfo.estateType, info.pos);
             AddObject((int)info.estateinfo.estateType, info.pos);
         }
     }
