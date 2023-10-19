@@ -29,6 +29,14 @@ public class GridContainer //: MonoBehaviour
         myMap[pos] =  info;
     }
 
+    public void EditTile(int tileId, Vector2Int pos)
+    {
+        if (myMap.ContainsKey(pos))
+        {
+            myMap[pos].SetHexType((TileType)tileId);
+        }
+    }
+
     public void TryEditTile(Vector2Int pos, out TileInfo info)
     {
         myMap.TryGetValue(pos, out TileInfo tryInfo);

@@ -47,6 +47,7 @@ public class RawMap : MonoBehaviour
         OnObjAdd.AddListener(AddObjectInfo);
         OnObjChange.AddListener(ChangeObjInfo);
         OnHexAdd.AddListener(AddHexInfo);
+        OnHexAdd.AddListener(ChangeHexInfo);
     }
     public void ClearMap()
     {
@@ -106,6 +107,11 @@ public class RawMap : MonoBehaviour
         gridContainer.Add(pos, info);
     }
 
+    private void ChangeHexInfo(int myHexid, Vector2Int pos)
+    {
+        gridContainer.EditTile(myHexid, pos);
+    }
+
     private void AddObjectInfo(int myestate, Vector2Int pos)
     {
         //if (HexBase == null) return;
@@ -153,6 +159,12 @@ public class RawMap : MonoBehaviour
     {
         currentPos = pos;
         OnHexAdd?.Invoke(myestate, pos);
+    }
+
+    public void InvokeChangeHex(int myestate, Vector2Int pos)
+    {
+        currentPos = pos;
+        OnHexChange?.Invoke(myestate, pos);
     }
 
     public void OnSave()

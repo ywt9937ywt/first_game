@@ -55,21 +55,26 @@ public class MapPainter : MonoBehaviour
             {
                 if (scriptHT != null) hit.transform.GetComponent<HexTile>().InvokeRootAddHex((int)tileType, scriptHT.pos);
             }
-            if(e.type == EventType.KeyDown && e.Equals(Event.KeyboardEvent(KeyCode.G.ToString())))
+            else if(e.type == EventType.KeyDown && e.Equals(Event.KeyboardEvent(KeyCode.G.ToString())))
             {
-                Debug.Log("gen obj");
                 //Vector2Int pos = hit.transform.GetComponent<HexTile>().pos;
                 //scriptHT = hit.transform.GetComponent<HexTile>();
                 if (scriptHT != null) scriptHT.InvokeRootAddObj((int)estateToGen, scriptHT.pos);
             }
-            if(e.type == EventType.KeyDown && e.Equals(Event.KeyboardEvent(KeyCode.Backspace.ToString())))
+            else if(e.type == EventType.KeyDown && e.Equals(Event.KeyboardEvent(KeyCode.Backspace.ToString())))
             {
                 Vector2Int pos = hit.transform.GetComponent<HexTile>().pos;
                 if(removeType == RemoveType.EstateObj)
                 {
                     //HexTile scriptHT = hit.transform.GetComponent<HexTile>();
                     if(scriptHT != null) scriptHT.InvokeRootChangeObj(-1, pos);
+                }else if (removeType == RemoveType.HexTile)
+                {
+                    if (scriptHT != null) scriptHT.InvokeRootRemoveHex(1000, pos);
                 }
+            }else if (e.type == EventType.KeyDown && e.Equals(Event.KeyboardEvent(KeyCode.P.ToString())))
+            {
+                if (scriptHT != null) hit.transform.GetComponent<HexTile>().InvokeRootAddHex((int)tileType, scriptHT.pos);
             }
         }
     }
