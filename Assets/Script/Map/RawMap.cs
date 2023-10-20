@@ -111,16 +111,16 @@ public class RawMap : MonoBehaviour
         HexBase.GetComponent<HexTile>().AddObj(myestate, pos);
     }
 
-    public void InvokeChangeObj(int myestate, Vector2Int pos)
+    public void InvokeChangeObj(Estate.Estates myestate, Vector2Int pos)
     {
         currentPos = pos;
-        OnObjChange?.Invoke(myestate, pos);
+        OnObjChange?.Invoke((int)myestate, pos);
     }
 
-    public void InvokeChangeHex(int myestate, Vector2Int pos)
+    public void InvokeChangeHex(TileType myestate, Vector2Int pos)
     {
         currentPos = pos;
-        OnHexChange?.Invoke(myestate, pos);
+        OnHexChange?.Invoke((int)myestate, pos);
     }
 
     public void OnSave()
@@ -136,7 +136,7 @@ public class RawMap : MonoBehaviour
         foreach (TileInfo info in loadMap)
         {
             Transform trans = AddHex(info.pos, info.thisTile.innerSize, info.thisTile.outerSize, info.thisTile.height, info.GetHexType());
-            AddObject((int)info.estateinfo.estateType, info.pos);
+            AddObject((int)info.estateType, info.pos);
         }
     }
 }

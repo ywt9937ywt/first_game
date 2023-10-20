@@ -41,24 +41,24 @@ public class MapPainter : MonoBehaviour
             if (scriptHT == null) return;
                 if (e.type == EventType.MouseDown && e.button == 2)
             {
-                hit.transform.GetComponent<HexTile>().InvokeRootChangeHex((int)tileType);
+                hit.transform.GetComponent<HexTile>().InvokeRootChangeHex(tileType);
             }
             else if(e.type == EventType.KeyDown && e.Equals(Event.KeyboardEvent(KeyCode.G.ToString())))
             {
-                scriptHT.InvokeRootChangeObj((int)estateToGen);
+                scriptHT.InvokeRootChangeObj(estateToGen);
             }
             else if(e.type == EventType.KeyDown && e.Equals(Event.KeyboardEvent(KeyCode.Backspace.ToString())))
             {
                 if(removeType == RemoveType.EstateObj)
                 {
-                    scriptHT.InvokeRootChangeObj(-1);
+                    scriptHT.InvokeRootChangeObj((int)Estate.Estates.None);
                 }else if (removeType == RemoveType.HexTile)
                 {
-                    scriptHT.InvokeRootChangeHex(1000);
+                    scriptHT.InvokeRootChangeHex(TileType.Edit);
                 }
             }else if (e.type == EventType.KeyDown && e.Equals(Event.KeyboardEvent(KeyCode.P.ToString())))
             {
-                hit.transform.GetComponent<HexTile>().InvokeRootChangeHex((int)tileType);
+                hit.transform.GetComponent<HexTile>().InvokeRootChangeHex(tileType);
             }
         }
     }

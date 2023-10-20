@@ -89,7 +89,7 @@ public class HexTile : MonoBehaviour
 
     }
 
-    public void InvokeRootChangeObj(int myestateid)
+    public void InvokeRootChangeObj(Estate.Estates myestateid)
     {
         if (hexBase == null)
         {
@@ -98,20 +98,20 @@ public class HexTile : MonoBehaviour
         }
         RawMap rootRawMap = mapRoot.GetComponent<RawMap>();
         rootRawMap.InvokeChangeObj(myestateid, pos);
-        if(myestateid == -1)
+        if(myestateid == Estate.Estates.None)
         {
             RemoveObj();
         }
         else
         {
-            AddObj(myestateid, pos);
+            AddObj((int)myestateid, pos);
         }
     }
 
-    public void InvokeRootChangeHex(int myHexid)
+    public void InvokeRootChangeHex(TileType myHexid)
     {
         RawMap rootRawMap = mapRoot.GetComponent<RawMap>();
         rootRawMap.InvokeChangeHex(myHexid, pos);
-        SetHexBase(myHexid, pos);
+        SetHexBase((int)myHexid, pos);
     }
 }

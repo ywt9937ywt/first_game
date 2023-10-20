@@ -8,6 +8,7 @@ public class Estate : ScriptableObject
     const int segment = 1000;
     public enum Estates
     {
+        None = 0, 
         Pine = 1,
 
 
@@ -28,7 +29,7 @@ public class Estate : ScriptableObject
     }
 
 }
-[System.Serializable]
+/*[System.Serializable]
 public class EstateInfo
 {
     public Estate.Estates estateType;
@@ -40,5 +41,5 @@ public class EstateInfo
         estateType = est;
         position = pos;
     }
-}
+}*/
 
